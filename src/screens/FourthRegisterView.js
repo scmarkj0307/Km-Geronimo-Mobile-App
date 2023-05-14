@@ -1,13 +1,32 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import { View, TextInput, TouchableOpacity, Text,Image  } from 'react-native';
 import {useNavigation} from "@react-navigation/core"
 import { LinearGradient } from 'expo-linear-gradient';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 
 
+const SignupSchema = Yup.object().shape({
+  firstInput: Yup.string()
+    .required('Missing!'),
+  secondInput: Yup.string()
+    .required('Missing!'),
+  thirdInput: Yup.string()
+    .required('Missing!'),
+  fourthInput: Yup.string()
+    .required('Missing!'),
+})
 
-const FourthRegisterView = () => {
+const FourthRegisterView = ({ route }) => {
   const navigation = useNavigation();
+  const { mobile } = route.params;
+
+  const firstInput = useRef();
+  const secondInput = useRef();
+  const thirdInput = useRef();
+  const fourthInput = useRef();
+  const [otp,setOtp] = useState({1:'',2:'',3:'',4:''})
  
 
   return (
@@ -21,7 +40,19 @@ const FourthRegisterView = () => {
 >
 {/*BACKGROUND COLOR*/ }
 
-{/* MAIN CONTAINER */ }
+
+<Formik initialValues={{
+      firsInput:'',
+      secondInput:'',
+      thirdInput: '',
+      fourthInput:'',
+    }}
+    validationSchema={SignupSchema}
+    onSubmit={values => Alert.alert(JSON.stringify(values))}
+    >
+      {({values,errors,touched,handleSubmit,handleChange,setFieldTouched,isValid}) => (
+
+
 <View className="flex-1 justify-flex-start items-center mt-12">
 {/* MAIN CONTAINER*/ }
 
@@ -40,39 +71,83 @@ const FourthRegisterView = () => {
      OTP SENT!
    </Text>
    <Text style={{ fontSize: 18,color: 'white', marginBottom: 20, textAlign: 'center' }}>
-     Enter a 4-digit code sent to you to verify your account.
+     Enter a 4-digit code sent to <Text style={{color: 'yellow'}}>{mobile}</Text> to verify your account.
    </Text>
 {/* OTP REMINDER-------------------------------------------------------------------------------*/ }
+
+
+
 
 {/*OTP TEXT INPUTS */ }
 <View style={{flexDirection: 'row',justifyContent: 'space-between',marginHorizontal: 30,marginTop: 20,marginRight:10}}>
       <View style={{flex: 1,borderRadius: 20,overflow: 'hidden',marginRight: 10}}>
         <TextInput
-          style={{backgroundColor: 'white',paddingHorizontal: 10,height: 80,}}
+          style={{backgroundColor: 'white',paddingHorizontal: 10,height: 80,fontSize:40,textAlign: 'center'}}
           placeholder=""
-          // Add any other TextInput props as needed
+          value={values.firstInput}
+          keyboardType='phone-pad'
+          maxLength={1}
+          ref={firstInput}
+          onChangeText={(text) => {
+              handleChange('firstInput')(text);
+              setOtp({ ...otp, 1: text });
+              text && secondInput.current.focus();
+          }}
+          onBlur={()=>setFieldTouched('firstInput')}
         />
+        
+     
       </View>
       <View style={{flex: 1,borderRadius: 20,overflow: 'hidden',marginRight: 10}}>
         <TextInput
-          style={{backgroundColor: 'white',paddingHorizontal: 10,height: 80,}}
+          style={{backgroundColor: 'white',paddingHorizontal: 10,height: 80,fontSize:40,textAlign: 'center'}}
           placeholder=""
-          // Add any other TextInput props as needed
+          value={values.secondInput}
+          keyboardType='phone-pad'
+          maxLength={1}
+          ref={secondInput}
+          onChangeText={(text) => {
+              handleChange('secondInput')(text);
+              setOtp({...otp,2: text})
+              text ? thirdInput.current.focus() : firstInput.current.focus();
+          }}
+          onBlur={()=>setFieldTouched('secondInput')}
         />
+       
       </View>
       <View style={{flex: 1,borderRadius: 20,overflow: 'hidden',marginRight: 10}}>
         <TextInput
-          style={{backgroundColor: 'white',paddingHorizontal: 10,height: 80,}}
+          style={{backgroundColor: 'white',paddingHorizontal: 10,height: 80,fontSize:40,textAlign: 'center'}}
           placeholder=""
-          // Add any other TextInput props as needed
+          value={values.thirdInput}
+          keyboardType='phone-pad'
+          maxLength={1}
+          ref={thirdInput}
+          onChangeText={(text) => {
+              handleChange('thirdInput')(text);
+              setOtp({...otp,3: text})
+              text ? fourthInput.current.focus() : secondInput.current.focus();
+          }}
+          onBlur={()=>setFieldTouched('thirdInput')}
         />
+        
       </View>
       <View style={{flex: 1,borderRadius: 20,overflow: 'hidden',marginRight: 10}}>
         <TextInput
-          style={{backgroundColor: 'white',paddingHorizontal: 10,height: 80,}}
+          style={{backgroundColor: 'white',paddingHorizontal: 10,height: 80,fontSize:40,textAlign: 'center'}}
           placeholder=""
-          // Add any other TextInput props as needed
+          value={values.fourthInput}
+          keyboardType='phone-pad'
+          maxLength={1}
+          ref={fourthInput}
+          onChangeText={(text) => {
+              handleChange('fourthInput')(text);
+              setOtp({...otp,4: text})
+              !text && thirdInput.current.focus();
+          }}
+          onBlur={()=>setFieldTouched('fourthInput')}
         />
+        
       </View>
     </View>
 {/*OTP TEXT INPUTS */ }
@@ -170,12 +245,14 @@ const FourthRegisterView = () => {
   {/* PAGINATION */ }  
 
   {/* CONTINUE BUTTON */ }    
-      <TouchableOpacity
+  <TouchableOpacity
+      disabled={!isValid || (!touched.firstInput && !touched.secondInput && !touched.thirdInput && !touched.fourthInput)}
       style={{
         marginTop: '5%',
-        backgroundColor: 'rgba(200, 255, 255, 0.9)', // Use translucent white color
-        width: '70%',
-        height: '8%',
+        marginBottom: '8%',
+        backgroundColor: !isValid  || (!touched.firstInput && !touched.secondInput && !touched.thirdInput && !touched.fourthInput) ? 'rgba(200, 255, 255, 0.5)' : 'rgba(200, 255, 255, 0.9)'  , // Use translucent white color
+        width: 250,
+        height: 55,
         paddingVertical: 10,
         borderRadius: 15,
         alignItems: 'center',
@@ -190,9 +267,11 @@ const FourthRegisterView = () => {
         shadowRadius: 3,
         elevation: 4, // Add elevation for Android shadow
       }}
-      onPress={() => {
-        navigation.navigate('Home');
-      }}
+      onPress={() => navigation.navigate("Home")}
+
+
+      
+      
     > 
       <Text className="text-black text-lg font-semibold">CONTINUE</Text>
       </TouchableOpacity>
@@ -203,6 +282,8 @@ const FourthRegisterView = () => {
 
 
     </View>
+    )}
+    </Formik>
     </LinearGradient>
   );
 };

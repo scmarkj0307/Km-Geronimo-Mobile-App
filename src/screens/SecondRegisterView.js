@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, Text,Image } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import { View, TextInput, TouchableOpacity, Text,Image, Pressable } from 'react-native';
 import {useNavigation} from "@react-navigation/core"
 import { LinearGradient } from 'expo-linear-gradient';
 import {Formik} from 'formik';
@@ -20,6 +21,13 @@ const SignupSchema = Yup.object().shape({
 
 const SecondRegisterView = () => {
   const navigation = useNavigation();
+
+  const [selectedItem,setSelectedItem] = useState(null)
+
+  const selectedData = [
+    {value: 'Male', imageLink: require('../../assets/male.png')},
+    {value: 'Female', imageLink: require('../../assets/female.png')}
+  ]
 
    
   return (
@@ -48,66 +56,75 @@ const SecondRegisterView = () => {
 {/* LOGO AND HEADER TITLE*/ }
 
 {/* TEXT REMINDER AND INSTRUCTION FOR GENDER */ }
-  <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 50, marginBottom: 5, textAlign: 'center' }}>
+  <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 10, marginBottom: 5, textAlign: 'center' }}>
       Please select a gender
     </Text>
-    <Text style={{ fontSize: 18,color: 'white', marginBottom: 20, textAlign: 'center' }}>
+    <Text style={{ fontSize: 18,color: 'white', marginBottom: 5, textAlign: 'center' }}>
       Reuired information to account creation.
     </Text>
 {/* TEXT REMINDER AND INSTRUCTION-------------------------------------------------------------------------------*/ }
 
 {/*GENDER BUTTONS */ }
-  <View style={{ flexDirection: 'row' }}>
-    <TouchableOpacity
-      style={{
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 35, // Add margin to create space between the images
-      }}
-    
-    >
-      <Image
-        source={require('../../assets/male.png')}
-        style={{
-          width: 80,
-          height: 80,
-        }}
-      />
-    </TouchableOpacity>
+  <View style={{ flexDirection: 'row', marginVertical: 10, marginLeft: 50 }}>
+    {selectedData.map(item =>{
 
-    <TouchableOpacity
-      style={{
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-      
-    >
-      <Image
-        source={require('../../assets/female.png')}
+      return (
+        <Pressable 
+        key={item.value} 
+        onPress={() => setSelectedItem(item.value)} 
         style={{
-          width: 80,
-          height: 80,
-        }}
-      />
-    </TouchableOpacity>
+                width: 150,
+                height:150,
+                borderRadius: 75,
+                backgroundColor: '#fff',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: 35, // Add margin to create space between the images
+        }}>
+          {selectedItem === item.value ? 
+          <View 
+            style={{
+              position: 'absolute',
+              width: 150,
+              height: 150,
+              zIndex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 75,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              borderWidth: 5,
+              borderColor: 'green',
+            }}>
+            <FontAwesome name="check-circle" size={20} color={"white"}/>
+          </View>:null}
+
+          <Image
+              source={item.imageLink}
+              style={{
+                width: 120,
+                height: 120,
+              }}
+            />
+        </Pressable>
+      )
+    })}
   </View>
 {/*GENDER BUTTONS */ }
 
+<View>
+  {selectedItem && 
+    <View style={{marginVertical:10,justifyContent: 'center',alignItems: 'center',}}>
+    <Text style={{fontSize: 18,color: 'white'}}>You have selected:</Text>
+    <Text style={{fontSize: 24,color: 'cyan', textAlign: 'center'}}>{selectedItem}</Text>
+    </View>}
+</View>
 
 {/* TEXT REMINDER AND INSTRUCTION FOR PHONE NUMBER */ }
-<Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 80, marginBottom: 5, textAlign: 'center' }}>
+<Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 10, marginBottom: 5, textAlign: 'center' }}>
       Please enter phone number
     </Text>
     <Text style={{ fontSize: 18,color: 'white', marginBottom: 20, textAlign: 'center' }}>
-      Reuired information to account creation.
+      Enter your 10 digit mobile no. i.e (9454121817).
     </Text>
 {/* TEXT REMINDER AND INSTRUCTION-------------------------------------------------------------------------------*/ }
 
@@ -119,9 +136,13 @@ const SecondRegisterView = () => {
       onSubmit={values => Alert.alert(JSON.stringify(values))}
     >
       {({values,errors,touched,handleSubmit,handleChange,setFieldTouched,isValid}) => (
-        <View className="flex-1 justify-flex items-center mt-1">
-        <TextInput
-            style={{
+      
+    
+      <View className="flex-1 justify-flex items-center mt-1">
+
+    {/*MOBILE NO. INPUT BOX*/}
+      <TextInput
+          style={{
               color: 'black',
               fontSize: 18,
               width: 250,
@@ -142,40 +163,25 @@ const SecondRegisterView = () => {
               shadowRadius: 3,
               elevation: 4, // Add elevation for Android shadow
             }}
-            placeholder="Mobile number"
-            value={values.mobile}
-            onChangeText={handleChange('mobile')}
-            onBlur={()=>setFieldTouched('mobile')}
+          placeholder="Mobile number"
+          keyboardType='phone-pad'
+          value={values.mobile}
+          onChangeText={handleChange('mobile')}
+          onBlur={()=>setFieldTouched('mobile')}
           />
           {touched.mobile && errors.mobile && (
             <Text style={{color:'red'}}>{errors.mobile}</Text>
           )}
+    {/*MOBILE NO. INPUT BOX*/}
 
-          <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop:40 }}>
+
+    {/*PAGINATION*/}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop:15 }}>
       <TouchableOpacity
         style={{
           paddingVertical: 8,
           paddingHorizontal: 16,
           backgroundColor: 'rgba(255, 255, 255, 0.7)', // Use translucent white color
-          borderWidth: 1,
-          borderColor: '#ccc',
-          borderRadius: 20,
-          marginRight: 5,
-          shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.8,
-          shadowRadius: 3,
-          elevation: 4, // Add elevation for Android shadow
-        }}
-      ></TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          paddingVertical: 8,
-          paddingHorizontal: 16,
-          backgroundColor: 'rgba(255, 255, 255, 0.7)', // Use translucent grey color
           borderWidth: 1,
           borderColor: '#ccc',
           borderRadius: 20,
@@ -228,16 +234,35 @@ const SecondRegisterView = () => {
           elevation: 4, // Add elevation for Android shadow
         }}
       ></TouchableOpacity>
-      </View>
- 
-
-    
       <TouchableOpacity
-      disabled={!isValid}
+        style={{
+          paddingVertical: 8,
+          paddingHorizontal: 16,
+          backgroundColor: 'rgba(128, 128, 128, 0.3)', // Use translucent grey color
+          borderWidth: 1,
+          borderColor: '#ccc',
+          borderRadius: 20,
+          marginRight: 5,
+          shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.8,
+          shadowRadius: 3,
+          elevation: 4, // Add elevation for Android shadow
+        }}
+      ></TouchableOpacity>
+      </View>
+    {/*PAGINATION*/}
+
+    {/*CONTINUE BUTTON*/}
+      <TouchableOpacity
+      disabled={!isValid || (!touched.mobile)}
       style={{
         marginTop: '5%',
         marginBottom: '8%',
-        backgroundColor: !isValid ? 'rgba(200, 255, 255, 0.5)' : 'rgba(200, 255, 255, 0.9)'  , // Use translucent white color
+        backgroundColor: !isValid || (!touched.mobile) ? 'rgba(200, 255, 255, 0.5)' : 'rgba(200, 255, 255, 0.9)'  , // Use translucent white color
         width: 250,
         height: 55,
         paddingVertical: 10,
@@ -254,19 +279,17 @@ const SecondRegisterView = () => {
         shadowRadius: 3,
         elevation: 4, // Add elevation for Android shadow
       }}
-      onPress={() => {{handleSubmit}
-        navigation.navigate('FOURTHREGISTER');
-      }}
-      
-      
-    > 
+      onPress={() => {
+        navigation.navigate('THIRDREGISTER',{ mobile: values.mobile });
+      }}> 
       <Text className="text-black text-lg font-semibold">CONTINUE</Text>
       </TouchableOpacity>
+    {/*CONTINUE BUTTON*/}
 
 
  
             
-      </View>
+    </View>
 
 )}
 </Formik>

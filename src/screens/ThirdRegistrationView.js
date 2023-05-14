@@ -28,9 +28,20 @@ const SignupSchema = Yup.object().shape({
   
 })
 
-const ThirdRegisterView = () => {
+const ThirdRegisterView = ({ route }  ) => {
   const navigation = useNavigation();
+  const { mobile } = route.params;
  
+  const handleFormSubmit = values => {
+    Alert.alert('Form Data', JSON.stringify(values), [
+      {
+        text: 'OK',
+        onPress: () => {
+          navigation.navigate('FOURTHREGISTER',{mobile});
+        },
+      },
+    ]);
+  };
 
   return (
     
@@ -102,10 +113,10 @@ const ThirdRegisterView = () => {
       confirmPassword: '',
     }}
       validationSchema={SignupSchema}
-      onSubmit={values => Alert.alert(JSON.stringify(values))}
+      onSubmit={handleFormSubmit}
     >
       {({values,errors,touched,handleSubmit,handleChange,setFieldTouched,isValid}) => (
-
+        
         <View className="flex-1 justify-flex items-center mt-1">
           <TextInput
             style={{
@@ -115,7 +126,7 @@ const ThirdRegisterView = () => {
               height: 50,
               paddingHorizontal: 16,
               marginTop: 0,
-              marginBottom: 2,
+              marginBottom: 5,
               borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
               borderWidth: 1,
               borderRadius: 10,
@@ -146,7 +157,7 @@ const ThirdRegisterView = () => {
               height: 50,
               paddingHorizontal: 16,
               marginTop: 10,
-              marginBottom: 2,
+              marginBottom: 5,
               borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
               borderWidth: 1,
               borderRadius: 10,
@@ -177,6 +188,7 @@ const ThirdRegisterView = () => {
               height: 50,
               paddingHorizontal: 16,
               marginTop: 10,
+              marginBottom: 5,
               borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
               borderWidth: 1,
               borderRadius: 10,
@@ -201,7 +213,7 @@ const ThirdRegisterView = () => {
       
 
     
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop:40 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop:20 }}>
       <TouchableOpacity
         style={{
           paddingVertical: 8,
@@ -283,11 +295,11 @@ const ThirdRegisterView = () => {
 
     
       <TouchableOpacity
-      disabled={!isValid}
+      disabled={!isValid || (!touched.username && !touched.password && !touched.confirmPassword)}
       style={{
         marginTop: '5%',
         marginBottom: '8%',
-        backgroundColor: !isValid ? 'rgba(200, 255, 255, 0.5)' : 'rgba(200, 255, 255, 0.9)'  , // Use translucent white color
+        backgroundColor: !isValid  || (!touched.username && !touched.password && !touched.confirmPassword) ? 'rgba(200, 255, 255, 0.5)' : 'rgba(200, 255, 255, 0.9)'  , // Use translucent white color
         width: 250,
         height: 55,
         paddingVertical: 10,
@@ -304,9 +316,9 @@ const ThirdRegisterView = () => {
         shadowRadius: 3,
         elevation: 4, // Add elevation for Android shadow
       }}
-      onPress={() => {{handleSubmit}
-        navigation.navigate('FOURTHREGISTER');
-      }}
+      onPress={handleSubmit}
+
+
       
       
     > 

@@ -1,14 +1,29 @@
 import React, { useState,useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Pressable,Platform,Image  } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, Pressable,Platform,Image,SafeAreaView  } from 'react-native';
 import {useNavigation} from "@react-navigation/core"
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+
+const SignupSchema = Yup.object().shape({
+  firstName: Yup.string()
+    .required('Please enter your first name.'),
+  middleName: Yup.string()
+    .required('Please enter your middle name.'),
+  lastName: Yup.string()
+    .required('Please enter your last name.'),
+  address: Yup.string()
+    .required('Please enter your address.'),
+  email: Yup.string()
+    .email('Invalid email')
+    .required('Please enter your email address.'),
+})
 
 
 const FirstRegisterView = () => {
 
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
 
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [date, setDate] = useState(new Date());
@@ -37,6 +52,8 @@ const FirstRegisterView = () => {
   
 
   return (
+
+  
     
   /*BACKGROUND COLOR*/ 
     <LinearGradient
@@ -47,9 +64,22 @@ const FirstRegisterView = () => {
     >
   {/*BACKGROUND COLOR*/ }
 
-  {/* MAIN CONTAINER */ }
-    <View className="flex-1 justify-flex-start items-center mt-12">
-  {/* MAIN CONTAINER*/ }
+
+  <Formik initialValues={{
+      firstName:'',
+      middleName:'',
+      lastName:'',
+      address:'',
+      email:'',
+    }}
+      validationSchema={SignupSchema}
+      onSubmit={values => Alert.alert(JSON.stringify(values))}
+    >
+      {({values,errors,touched,handleSubmit,handleChange,setFieldTouched,isValid}) => (
+
+ 
+    <SafeAreaView className="flex-1 justify-flex-start items-center mt-12">
+  
 
   {/* LOGO AND HEADER TITLE */ }
     <View style={{ marginRight: 18, flexDirection: 'row', alignItems: 'center' }}>
@@ -62,7 +92,7 @@ const FirstRegisterView = () => {
    {/* LOGO AND HEADER TITLE*/ }
 
   {/* TEXT REMINDER AND INSTRUCTION */ }
-      <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 15, marginBottom: 5, textAlign: 'center' }}>
+      <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 5, marginBottom: 5, textAlign: 'center' }}>
           Please fill the boxes below
         </Text>
         <Text style={{ fontSize: 18,color: 'white', marginBottom: 20, textAlign: 'center' }}>
@@ -74,113 +104,142 @@ const FirstRegisterView = () => {
   {/* INPUT BOX - FIRST NAME */ }
       <TextInput
           style={{
-            color: 'black',
-            fontSize: 20,
-            width: '80%',
-            height: 50,
-            paddingHorizontal: 16,
-            marginBottom: 20,
-            borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
-            borderWidth: 1,
-            borderRadius: 10,
-            backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
-            shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.8,
-            shadowRadius: 3,
-            elevation: 4, // Add elevation for Android shadow
+             color: 'black',
+              fontSize: 18,
+              width: 315,
+              height: 55,
+              paddingHorizontal: 16,
+              marginTop: 0,
+              marginBottom: 2,
+              borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
+              borderWidth: 1,
+              borderRadius: 10,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
+              shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.8,
+              shadowRadius: 3,
+              elevation: 4, // Add elevation for Android shadow
           }}
           placeholder="First Name"
+          value={values.firstName}
+            onChangeText={handleChange('firstName')}
+            onBlur={()=>setFieldTouched('firstName')}
         />
+          {touched.firstName && errors.firstName && (
+            <Text style={{color:'red'}}>{errors.firstName}</Text>
+          )}
+
   {/* INPUT BOX - FIRST NAME*/ }
 
 
   {/* INPUT BOX - MIDDLE NAME */ }      
         <TextInput
           style={{
-            color: 'black',
-            fontSize: 20,
-            width: '80%',
-            height: 50,
-            paddingHorizontal: 16,
-            marginBottom: 20,
-            borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
-            borderWidth: 1,
-            borderRadius: 10,
-            backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
-            shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.8,
-            shadowRadius: 3,
-            elevation: 4, // Add elevation for Android shadow
+              color: 'black',
+              fontSize: 18,
+              width: 315,
+              height: 55,
+              paddingHorizontal: 16,
+              marginTop: 5,
+              marginBottom: 2,
+              borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
+              borderWidth: 1,
+              borderRadius: 10,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
+              shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.8,
+              shadowRadius: 3,
+              elevation: 4, // Add elevation for Android shadow
           }}
           placeholder="Middle Name"
+          value={values.middleName}
+            onChangeText={handleChange('middleName')}
+            onBlur={()=>setFieldTouched('middleName')}
         />
+          {touched.middleName && errors.middleName && (
+            <Text style={{color:'red'}}>{errors.middleName}</Text>
+          )}
   {/* INPUT BOX - MIDDLE NAME */ }
 
 
   {/* INPUT BOX - LAST NAME */ }        
         <TextInput
           style={{
-            color: 'black',
-            fontSize: 20,
-            width: '80%',
-            height: 50,
-            paddingHorizontal: 16,
-            marginBottom: 20,
-            borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
-            borderWidth: 1,
-            borderRadius: 10,
-            backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
-            shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.8,
-            shadowRadius: 3,
-            elevation: 4, // Add elevation for Android shadow
+              color: 'black',
+              fontSize: 18,
+              width: 315,
+              height: 55,
+              paddingHorizontal: 16,
+              marginTop: 5,
+              marginBottom: 2,
+              borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
+              borderWidth: 1,
+              borderRadius: 10,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
+              shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.8,
+              shadowRadius: 3,
+              elevation: 4, // Add elevation for Android shadow
           }}
           placeholder="Last Name"
+          value={values.lastName}
+            onChangeText={handleChange('lastName')}
+            onBlur={()=>setFieldTouched('lastName')}
         />
+          {touched.lastName && errors.lastName && (
+            <Text style={{color:'red'}}>{errors.lastName}</Text>
+          )}
   {/* INPUT BOX - LAST NAME */ }
 
 
-  {/* INPUT BOX - ADSRESS */ }
+  {/* INPUT BOX - ADDRESS */ }
         <TextInput
           style={{
-            color: 'black',
-            fontSize: 20,
-            width: '80%',
-            height: 50,
-            paddingHorizontal: 16,
-            marginBottom: 20,
-            borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
-            borderWidth: 1,
-            borderRadius: 10,
-            backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
-            shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.8,
-            shadowRadius: 3,
-            elevation: 4, // Add elevation for Android shadow
+              color: 'black',
+              fontSize: 18,
+              width: 315,
+              height: 55,
+              paddingHorizontal: 16,
+              marginTop: 5,
+              marginBottom: 2,
+              borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
+              borderWidth: 1,
+              borderRadius: 10,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
+              shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.8,
+              shadowRadius: 3,
+              elevation: 4, // Add elevation for Android shadow
           }}
           placeholder="Address"
+          value={values.address}
+            onChangeText={handleChange('address')}
+            onBlur={()=>setFieldTouched('address')}
         />
+          {touched.address && errors.address && (
+            <Text style={{color:'red'}}>{errors.address}</Text>
+          )}
   {/* INPUT BOX - ADDRESS */ }
 
   
   {/* INPUT BOX - BIRTHDAY */ }
-    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, marginTop: 10 }}>
         <Text style={{ fontSize: 24, color: 'white', marginRight: 10 }}>BIRTHDATE:</Text>
 
         {showPicker && (
@@ -234,7 +293,7 @@ const FirstRegisterView = () => {
         width: '80%',
         height: 50,
         paddingHorizontal: 16,
-        marginBottom: 20,
+        marginBottom: 5,
         borderRadius: 10,
         backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color
         borderWidth: 1,
@@ -243,9 +302,13 @@ const FirstRegisterView = () => {
       
       }}
       placeholder="Email"
-      value={email}
-      onChangeText={setEmail}
-    />
+          value={values.email}
+            onChangeText={handleChange('email')}
+            onBlur={()=>setFieldTouched('email')}
+        />
+          {touched.email && errors.email && (
+            <Text style={{color:'red'}}>{errors.email}</Text>
+          )}
   {/* INPUT BOX - EMAIL */ }   
 
 
@@ -332,11 +395,12 @@ const FirstRegisterView = () => {
 
   {/* CONTINUE BUTTON */ }    
     <TouchableOpacity
+      disabled={!isValid || (!touched.firstName && !touched.middleName && !touched.lastName && !touched.address && !touched.dateOfBirth && !touched.email )}
       style={{
         marginTop: '5%',
-        backgroundColor: 'rgba(200, 255, 255, 0.9)', // Use translucent white color
-        width: '70%',
-        height: '8%',
+        backgroundColor: !isValid || (!touched.firstName && !touched.middleName && !touched.lastName && !touched.address && !touched.dateOfBirth && !touched.email) ? 'rgba(200, 255, 255, 0.5)' : 'rgba(200, 255, 255, 0.9)'  , // Use translucent white color
+        width: 250,
+        height: 55,
         paddingVertical: 10,
         borderRadius: 15,
         alignItems: 'center',
@@ -364,8 +428,12 @@ const FirstRegisterView = () => {
 
 
 
-    </View>
+    </SafeAreaView>
+    )}
+</Formik>
+
     </LinearGradient>
+
   );
 };
 
