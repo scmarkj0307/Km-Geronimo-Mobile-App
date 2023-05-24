@@ -4,23 +4,32 @@ import { View, TextInput, TouchableOpacity, Text,Image, Pressable } from 'react-
 import {useNavigation} from "@react-navigation/core"
 import { LinearGradient } from 'expo-linear-gradient';
 import {Formik} from 'formik';
-import * as Yup from 'yup';
+import * as ImagePicker from 'expo-image-picker';
 
-const SignupSchema = Yup.object().shape({
-  mobile: Yup.string()
-    .min(10, 'Must be exactly 10 digits')
-    .max(10, 'Must be exactly 10 digits')
-    .matches( /^[0-9]+$/ ,'Must be only digits')
-    .required('Please enter mobile number.'),
- 
-  
-  
-  
-})
+
 
 
 const SecondRegisterView = () => {
   const navigation = useNavigation();
+
+  const [selectedImage, setSelectedImage] = useState(null);
+    
+    const openImagePicker = async () => {
+      try {
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          quality: 1,
+        });
+    
+        if (!result.canceled) { 
+          const { assets } = result;
+          const { uri } = assets[0];
+          setSelectedImage(uri);
+        }
+      } catch (error) {
+        console.log('Error in openImagePicker:', error);
+      }
+    };
 
   const [selectedItem,setSelectedItem] = useState(null)
 
@@ -55,19 +64,10 @@ const SecondRegisterView = () => {
 </View>
 {/* LOGO AND HEADER TITLE*/ }
 
-{/* TEXT REMINDER AND INSTRUCTION FOR PHONE NUMBER */ }
-<Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 10, marginBottom: 5, textAlign: 'center' }}>
-      Please enter phone number
-    </Text>
-    <Text style={{ fontSize: 18,color: 'white', marginBottom: 10, textAlign: 'center' }}>
-      Enter your 10 digit mobile no. i.e (9454121817).
-    </Text>
-{/* TEXT REMINDER AND INSTRUCTION-------------------------------------------------------------------------------*/ }
 
 <Formik initialValues={{
-      mobile:'',
+    
     }}
-      validationSchema={SignupSchema}
       onSubmit={values => Alert.alert(JSON.stringify(values))}
     >
       {({values,errors,touched,handleSubmit,handleChange,setFieldTouched,isValid}) => (
@@ -75,40 +75,36 @@ const SecondRegisterView = () => {
     
       <View className="flex-1 justify-flex items-center mt-1">
 
-    {/*MOBILE NO. INPUT BOX*/}
-      <TextInput
-          style={{
-              color: 'black',
-              fontSize: 18,
-              width: 250,
-              height: 50,
-              paddingHorizontal: 16,
-              marginTop: 0,
-              marginBottom: 2,
-              borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
-              borderWidth: 1,
-              borderRadius: 10,
-              backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
-              shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.8,
-              shadowRadius: 3,
-              elevation: 4, // Add elevation for Android shadow
-            }}
-          placeholder="Mobile number"
-          keyboardType='phone-pad'
-          maxLength={10}
-          value={values.mobile}
-          onChangeText={handleChange('mobile')}
-          onBlur={()=>setFieldTouched('mobile')}
-          />
-          {touched.mobile && errors.mobile && (
-            <Text style={{color:'red'}}>{errors.mobile}</Text>
-          )}
-    {/*MOBILE NO. INPUT BOX*/}
+     {/* TEXT REMINDER AND INSTRUCTION FOR PROFILE */ }
+  <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 10, marginBottom: 5, textAlign: 'center' }}>
+      Please upload a picture
+    </Text>
+    <Text style={{ fontSize: 18,color: 'white', marginBottom: 5, textAlign: 'center' }}>
+      Reuired information to account creation.
+    </Text>
+{/* TEXT REMINDER AND INSTRUCTION-------------------------------------------------------------------------------*/ }
+          
+      
+      
+          <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+              {selectedImage && (
+                <TouchableOpacity onPress={openImagePicker}>
+                  <View style={{ marginTop: 10 }}>
+                    <Image
+                      source={{ uri: selectedImage }}
+                      style={{ width: 120, height: 120, borderRadius: 60 }}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
+              {!selectedImage && (
+                <TouchableOpacity onPress={openImagePicker}>
+                  <View style={{ marginTop: 10, backgroundColor: '#f2f2f2', padding: 10, borderRadius: 8 }}>
+                    <Text style={{ fontSize: 16, color: '#333' }}>Select Image</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            </View>
 
     {/* TEXT REMINDER AND INSTRUCTION FOR GENDER */ }
   <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 20, marginBottom: 5, textAlign: 'center' }}>
@@ -128,9 +124,9 @@ const SecondRegisterView = () => {
         key={item.value} 
         onPress={() => setSelectedItem(item.value)} 
         style={{
-                width: 150,
-                height:150,
-                borderRadius: 75,
+                width: 120,
+                height:120,
+                borderRadius: 60,
                 backgroundColor: '#fff',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -140,12 +136,12 @@ const SecondRegisterView = () => {
           <View 
             style={{
               position: 'absolute',
-              width: 150,
-              height: 150,
+              width: 120,
+              height: 120,
               zIndex: 1,
               justifyContent: 'center',
               alignItems: 'center',
-              borderRadius: 75,
+              borderRadius: 60,
               backgroundColor: 'rgba(0, 0, 0, 0.5)',
               borderWidth: 5,
               borderColor: 'cyan',
@@ -156,8 +152,8 @@ const SecondRegisterView = () => {
           <Image
               source={item.imageLink}
               style={{
-                width: 120,
-                height: 120,
+                width: 100,
+                height: 100,
               }}
             />
         </Pressable>
@@ -257,11 +253,11 @@ const SecondRegisterView = () => {
 
     {/*CONTINUE BUTTON*/}
       <TouchableOpacity
-      disabled={!isValid || (!touched.mobile || !selectedItem)}
+      disabled={!selectedImage || !selectedItem}
       style={{
         marginTop: '5%',
         marginBottom: '8%',
-        backgroundColor: !isValid || (!touched.mobile) || !selectedItem ? 'rgba(200, 255, 255, 0.3)' : 'rgba(200, 255, 255, 0.9)'  , // Use translucent white color
+        backgroundColor: !selectedImage || !selectedItem  ? 'rgba(200, 255, 255, 0.3)' : 'rgba(200, 255, 255, 0.9)'  , // Use translucent white color
         width: 250,
         height: 55,
         paddingVertical: 10,
@@ -279,7 +275,7 @@ const SecondRegisterView = () => {
         elevation: 20, // Add elevation for Android shadow
       }}
       onPress={() => {
-        navigation.navigate('THIRDREGISTER',{ mobile: values.mobile });
+        navigation.navigate('THIRDREGISTER');
       }}> 
       <Text className="text-black text-lg font-semibold">CONTINUE</Text>
       </TouchableOpacity>

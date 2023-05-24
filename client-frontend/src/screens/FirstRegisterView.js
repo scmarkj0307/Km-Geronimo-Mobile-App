@@ -1,30 +1,33 @@
-import React, { useState,useEffect,useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Pressable,Platform,Image,SafeAreaView  } from 'react-native';
-import {useNavigation} from "@react-navigation/core"
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  Pressable,
+  Platform,
+  Image,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  ScrollView,
+} from 'react-native';
+
+import { useNavigation } from "@react-navigation/core"
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 const SignupSchema = Yup.object().shape({
-  firstName: Yup.string()
-    .required('Please enter your first name.'),
-  middleName: Yup.string()
-    .required('Please enter your middle name.'),
-  lastName: Yup.string()
-    .required('Please enter your last name.'),
-  address: Yup.string()
-    .required('Please enter your address.'),
-  email: Yup.string()
-    .email('Enter a valid email')
-    .required('Please enter your email address.'),
-})
-
+  firstName: Yup.string().required('Please enter your first name.'),
+  middleName: Yup.string().required('Please enter your middle name.'),
+  lastName: Yup.string().required('Please enter your last name.'),
+  address: Yup.string().required('Please enter your address.'),
+  email: Yup.string().email('Enter a valid email').required('Please enter your email address.'),
+});
 
 const FirstRegisterView = () => {
-
   const navigation = useNavigation();
-
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
@@ -33,18 +36,16 @@ const FirstRegisterView = () => {
     setShowPicker(!showPicker);
   };
 
-  const onChange = ({type},selectedDate) => {
-    if(type=="set"){
+  const onChange = ({ type }, selectedDate) => {
+    if (type === "set") {
       const currentDate = selectedDate;
-      setDate(currentDate); 
+      setDate(currentDate);
 
-
-      if (Platform.OS === "android"){
+      if (Platform.OS === "android") {
         toggleDatepicker();
         setDateOfBirth(currentDate.toDateString());
       }
-    } 
-    else{
+    } else {
       toggleDatepicker();
     }
   };
@@ -60,14 +61,13 @@ const FirstRegisterView = () => {
       nextRef.current.focus();
     }
   };
-
   
 
   return (
 
-  
+<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     
-  /*BACKGROUND COLOR*/ 
     <LinearGradient
       colors={['#0891b2', '#0891b2']}
       start={{ x: 0, y: 0 }}
@@ -113,41 +113,6 @@ const FirstRegisterView = () => {
   {/* TEXT REMINDER AND INSTRUCTION-------------------------------------------------------------------------------*/ }
 
   <View style={{ position: 'relative'}}>
-  {/* INPUT BOX - EMAIL */ }    
-  <TextInput
-      style={{
-              color: 'black',
-              fontSize: 18,
-              width: 315,
-              height: 40,
-              paddingHorizontal: 16,
-              marginTop: 0,
-              marginBottom: 2,
-              borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
-              borderWidth: 1,
-              borderRadius: 10,
-              backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
-              shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.8,
-              shadowRadius: 3,
-              elevation: 4, // Add elevation for Android shadow
-      
-      
-      }}
-      ref={emailRef}
-      placeholder="Email"
-          value={values.email}
-            onChangeText={handleChange('email')}
-            onBlur={()=>setFieldTouched('email')}
-        />
-          {touched.email && errors.email && (
-            <Text style={{color:'red'}}>{errors.email}</Text>
-          )}
-  {/* INPUT BOX - EMAIL */ }   
   
   {/* INPUT BOX - FIRST NAME */ }
       <TextInput
@@ -312,6 +277,43 @@ const FirstRegisterView = () => {
             <Text style={{color:'red'}}>{errors.address}</Text>
           )}
   {/* INPUT BOX - ADDRESS */ }
+
+  {/* INPUT BOX - EMAIL */ }    
+  <TextInput
+      style={{
+              color: 'black',
+              fontSize: 18,
+              width: 315,
+              height: 40,
+              paddingHorizontal: 16,
+              marginTop: 0,
+              marginBottom: 2,
+              borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
+              borderWidth: 1,
+              borderRadius: 10,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
+              shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.8,
+              shadowRadius: 3,
+              elevation: 4, // Add elevation for Android shadow
+      
+      
+      }}
+      ref={emailRef}
+      placeholder="Email"
+          value={values.email}
+            onChangeText={handleChange('email')}
+            onBlur={()=>setFieldTouched('email')}
+        />
+          {touched.email && errors.email && (
+            <Text style={{color:'red'}}>{errors.email}</Text>
+          )}
+  {/* INPUT BOX - EMAIL */ }   
+  
 </View>
   
   {/* INPUT BOX - BIRTHDAY */ }
@@ -360,6 +362,7 @@ const FirstRegisterView = () => {
     </View>
   {/* INPUT BOX - BIRTHDAY */ }
 
+  
 
   {/* PAGINATION */ } 
     <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
@@ -482,6 +485,8 @@ const FirstRegisterView = () => {
 </Formik>
 
     </LinearGradient>
+    </ScrollView>
+    </KeyboardAvoidingView>
 
   );
 };

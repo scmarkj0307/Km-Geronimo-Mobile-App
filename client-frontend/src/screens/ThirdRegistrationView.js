@@ -1,11 +1,10 @@
-  import React, { useState,useEffect } from 'react';
-  import * as ImagePicker from 'expo-image-picker';
-  import Icon from 'react-native-vector-icons/FontAwesome';
-  import { View, TextInput, TouchableOpacity, Text,Image,Alert  } from 'react-native';
-  import {useNavigation} from "@react-navigation/core"
-  import { LinearGradient } from 'expo-linear-gradient';
-  import {Formik} from 'formik';
-  import * as Yup from 'yup';
+import React, { useState, useEffect } from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, TextInput, TouchableOpacity, Text, Image, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { useNavigation } from "@react-navigation/core"
+import { LinearGradient } from 'expo-linear-gradient';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 
 
@@ -50,32 +49,11 @@
         {
           text: 'OK',
           onPress: () => {
-            navigation.navigate('FOURTHREGISTER',{mobile});
+            navigation.navigate('FOURTHREGISTER',{ mobile: values.mobile });
           },
         },
       ]);
     };
-
-
-    const [selectedImage, setSelectedImage] = useState(null);
-    
-    const openImagePicker = async () => {
-      try {
-        const result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          quality: 1,
-        });
-    
-        if (!result.canceled) { // Change 'cancelled' to 'canceled'
-          const { assets } = result;
-          const { uri } = assets[0];
-          setSelectedImage(uri);
-        }
-      } catch (error) {
-        console.log('Error in openImagePicker:', error);
-      }
-    };
-    
     
     
       return (
@@ -88,9 +66,15 @@
         style={{ flex: 1 }}
       >
       
-      
-      
-      <View className="flex-1 justify-flex-start items-center mt-12">
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View className="flex-1 justify-flex-start items-center mt-12">
       
       
       
@@ -115,6 +99,7 @@
             username:'',
             password:'',
             confirmPassword: '',
+            mobile: '',
           }}
             validationSchema={SignupSchema}
             onSubmit={handleFormSubmit}
@@ -230,14 +215,49 @@
                 )}
 
           {/* TEXT REMINDER AND INSTRUCTION FOR PHONE NUMBER */ }
-<Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 10, marginBottom: 5, textAlign: 'center' }}>
-      Please enter phone number
-    </Text>
-    <Text style={{ fontSize: 18,color: 'white', marginBottom: 10, textAlign: 'center' }}>
-      Enter your 10 digit mobile no. i.e (9454121817).
-    </Text>
-{/* TEXT REMINDER AND INSTRUCTION-------------------------------------------------------------------------------*/ }
+          <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 10, marginBottom: 5, textAlign: 'center' }}>
+                Please enter phone number
+              </Text>
+              <Text style={{ fontSize: 18,color: 'white', marginBottom: 10, textAlign: 'center' }}>
+                Enter your 10 digit mobile no. i.e (9454121817).
+              </Text>
+          {/* TEXT REMINDER AND INSTRUCTION-------------------------------------------------------------------------------*/ }
 
+         {/*MOBILE NO. INPUT BOX*/}
+          <TextInput
+              style={{
+                  color: 'black',
+                  fontSize: 18,
+                  width: 250,
+                  height: 50,
+                  paddingHorizontal: 16,
+                  marginTop: 0,
+                  marginBottom: 2,
+                  marginLeft: 35,
+                  borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)', // Use translucent white color for the background
+                  shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.8,
+                  shadowRadius: 3,
+                  elevation: 4, // Add elevation for Android shadow
+                }}
+              placeholder="Mobile number"
+              keyboardType='phone-pad'
+              maxLength={10}
+              value={values.mobile}
+              onChangeText={handleChange('mobile')}
+              onBlur={()=>setFieldTouched('mobile')}
+              />
+              {touched.mobile && errors.mobile && (
+                <Text style={{color:'red'}}>{errors.mobile}</Text>
+              )}
+        {/*MOBILE NO. INPUT BOX*/}
         
             
       
@@ -365,6 +385,8 @@
       
       
           </View>
+          </ScrollView>
+          </KeyboardAvoidingView>
           </LinearGradient>
           
         );
