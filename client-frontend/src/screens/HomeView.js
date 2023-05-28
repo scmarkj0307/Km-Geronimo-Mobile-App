@@ -53,10 +53,16 @@ const HomeView = () => {
 
   const handleLogin = () => {
     // Trigger the button animation
-    startButtonAnimation();
+    startButtonAnimationLogin();
   };
+
+  const handleRegister = () => {
+    // Trigger the button animation
+    startButtonAnimationRegister();
+  };
+
   
-  const startButtonAnimation = () => {
+  const startButtonAnimationLogin = () => {
     Animated.parallel([
       Animated.timing(logoScaleValue, {
         toValue: 0.8,
@@ -73,6 +79,27 @@ const HomeView = () => {
       resetLogoAnimation(() => {
         // Animation reset complete, navigate to the next screen
         navigation.navigate('LOGIN');
+      });
+    });
+  };
+
+  const startButtonAnimationRegister = () => {
+    Animated.parallel([
+      Animated.timing(logoScaleValue, {
+        toValue: 0.8,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(logoOpacityValue, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      // Animation complete
+      resetLogoAnimation(() => {
+        // Animation reset complete, navigate to the next screen
+        navigation.navigate('REGISTER');
       });
     });
   };
@@ -148,7 +175,7 @@ const HomeView = () => {
     </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("REGISTER")}
+          onPress={handleRegister}
           style={{
             marginTop: 10,
             backgroundColor:  '#06b6d4',

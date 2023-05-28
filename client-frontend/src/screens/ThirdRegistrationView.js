@@ -88,7 +88,7 @@ import * as Yup from 'yup';
       
       
       
-        <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 10, marginBottom: 5, textAlign: 'center' }}>
+        <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 20, marginBottom: 5, textAlign: 'center' }}>
             Setup your account
           </Text>
           <Text style={{ fontSize: 18,color: 'white', marginBottom: 20, textAlign: 'center' }}>

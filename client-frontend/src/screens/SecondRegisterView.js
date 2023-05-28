@@ -76,7 +76,7 @@ const SecondRegisterView = () => {
       <View className="flex-1 justify-flex items-center mt-1">
 
      {/* TEXT REMINDER AND INSTRUCTION FOR PROFILE */ }
-  <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 10, marginBottom: 5, textAlign: 'center' }}>
+  <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 20, marginBottom: 5, textAlign: 'center' }}>
       Please upload a picture
     </Text>
     <Text style={{ fontSize: 18,color: 'white', marginBottom: 5, textAlign: 'center' }}>

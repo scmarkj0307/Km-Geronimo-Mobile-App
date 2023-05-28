@@ -104,7 +104,7 @@ const FirstRegisterView = () => {
    {/* LOGO AND HEADER TITLE*/ }
 
   {/* TEXT REMINDER AND INSTRUCTION */ }
-      <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 5, marginBottom: 5, textAlign: 'center' }}>
+      <Text Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white',marginTop: 30, marginBottom: 5, textAlign: 'center' }}>
           Please fill the boxes below
         </Text>
         <Text style={{ fontSize: 18,color: 'white', marginBottom: 20, textAlign: 'center' }}>
@@ -270,6 +270,7 @@ const FirstRegisterView = () => {
           onChangeText={(text) => {
             handleChange('address')(text);
           }}
+          onSubmitEditing={() => focusNextField(emailRef)}
           returnKeyType="next"
           onBlur={()=>setFieldTouched('address')}
         />
@@ -281,12 +282,12 @@ const FirstRegisterView = () => {
   {/* INPUT BOX - EMAIL */ }    
   <TextInput
       style={{
-              color: 'black',
+        color: 'black',
               fontSize: 18,
               width: 315,
               height: 40,
               paddingHorizontal: 16,
-              marginTop: 0,
+              marginTop: 5,
               marginBottom: 2,
               borderColor: 'rgba(255, 255, 255, 0.3)', // Use translucent white color for the border
               borderWidth: 1,

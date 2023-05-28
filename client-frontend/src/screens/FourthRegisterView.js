@@ -17,10 +17,10 @@ const FourthRegisterView = ({ route }) => {
   const navigation = useNavigation();
   const { mobile } = route.params;
 
-  const firstInput = useRef(null);
-  const secondInput = useRef(null);
-  const thirdInput = useRef(null);
-  const fourthInput = useRef(null);
+  const firstInput = useRef();
+  const secondInput = useRef();
+  const thirdInput = useRef();
+  const fourthInput = useRef();
 
   const [otp, setOtp] = useState('');
   const [countdown, setCountdown] = useState(0);
@@ -115,7 +115,7 @@ const FourthRegisterView = ({ route }) => {
                 fontSize: 24,
                 fontWeight: 'bold',
                 color: 'white',
-                marginTop: 80,
+                marginTop: 40,
                 marginBottom: 5,
                 textAlign: 'center',
               }}
@@ -148,12 +148,13 @@ const FourthRegisterView = ({ route }) => {
                     textAlign: 'center',
                   }}
                   placeholder=""
-                  value={values.firstInput}
-                  onChangeText={handleChange('firstInput')}
-                  onBlur={() => setFieldTouched('firstInput')}
+                  onChangeText={text=>{
+                    text && secondInput.current.focus()
+                  }}
                   ref={firstInput}
                   maxLength={1}
-                  keyboardType="numeric"
+                  keyboardType="number-pad"
+              
                 />
               </View>
               <View style={{ flex: 1, borderRadius: 20, overflow: 'hidden', marginRight: 10 }}>
@@ -166,12 +167,12 @@ const FourthRegisterView = ({ route }) => {
                     textAlign: 'center',
                   }}
                   placeholder=""
-                  value={values.secondInput}
-                  onChangeText={handleChange('secondInput')}
-                  onBlur={() => setFieldTouched('secondInput')}
+                  onChangeText={text=>{
+                    text ? thirdInput.current.focus() : firstInput.current.focus()
+                  }}
                   ref={secondInput}
                   maxLength={1}
-                  keyboardType="numeric"
+                  keyboardType="number-pad"
                 />
               </View>
               <View style={{ flex: 1, borderRadius: 20, overflow: 'hidden', marginRight: 10 }}>
@@ -184,12 +185,12 @@ const FourthRegisterView = ({ route }) => {
                     textAlign: 'center',
                   }}
                   placeholder=""
-                  value={values.thirdInput}
-                  onChangeText={handleChange('thirdInput')}
-                  onBlur={() => setFieldTouched('thirdInput')}
                   ref={thirdInput}
                   maxLength={1}
-                  keyboardType="numeric"
+                  onChangeText={text=>{
+                    text ? fourthInput.current.focus() : secondInput.current.focus()
+                  }}
+                  keyboardType="phone-pad"
                 />
               </View>
               <View style={{ flex: 1, borderRadius: 20, overflow: 'hidden' }}>
@@ -202,16 +203,97 @@ const FourthRegisterView = ({ route }) => {
                     textAlign: 'center',
                   }}
                   placeholder=""
-                  value={values.fourthInput}
-                  onChangeText={handleChange('fourthInput')}
-                  onBlur={() => setFieldTouched('fourthInput')}
                   ref={fourthInput}
                   maxLength={1}
-                  keyboardType="numeric"
+                  onChangeText={text=>{
+                    !text && thirdInput.current.focus()
+                  }}
+                  keyboardType="number-pad"
                 />
               </View>
             </View>
             {/* OTP TEXT INPUTS ------------------------------------------------------------------------------*/}
+
+            {/* PAGINATION */ } 
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 70 }}>
+                  <TouchableOpacity
+                    style={{
+                      paddingVertical: 8,
+                      paddingHorizontal: 16,
+                      backgroundColor: 'rgba(255, 255, 255, 0.7)', // Use translucent white color
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      borderRadius: 20,
+                      marginRight: 5,
+                      shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+                      shadowOffset: {
+                        width: 0,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.8,
+                      shadowRadius: 3,
+                      elevation: 4, // Add elevation for Android shadow
+                    }}
+                  ></TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      paddingVertical: 8,
+                      paddingHorizontal: 16,
+                      backgroundColor: 'rgba(255, 255, 255, 0.7)', // Use translucent grey color
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      borderRadius: 20,
+                      marginRight: 5,
+                      shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+                      shadowOffset: {
+                        width: 0,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.8,
+                      shadowRadius: 3,
+                      elevation: 4, // Add elevation for Android shadow
+                    }}
+                  ></TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      paddingVertical: 8,
+                      paddingHorizontal: 16,
+                      backgroundColor: 'rgba(255, 255, 255, 0.7)', // Use translucent grey color
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      borderRadius: 20,
+                      marginRight: 5,
+                      shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+                      shadowOffset: {
+                        width: 0,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.8,
+                      shadowRadius: 3,
+                      elevation: 4, // Add elevation for Android shadow
+                    }}
+                  ></TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      paddingVertical: 8,
+                      paddingHorizontal: 16,
+                      backgroundColor: 'rgba(255, 255, 255, 0.7)', // Use translucent grey color
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      borderRadius: 20,
+                      marginRight: 5,
+                      shadowColor: 'rgba(0, 0, 0, 0.2)', // Add a shadow color
+                      shadowOffset: {
+                        width: 0,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.8,
+                      shadowRadius: 3,
+                      elevation: 4, // Add elevation for Android shadow
+                    }}
+                  ></TouchableOpacity>
+                </View>
+              {/* PAGINATION */ }  
 
             {/* CONTINUE BUTTON */}
             <TouchableOpacity
@@ -236,23 +318,33 @@ const FourthRegisterView = ({ route }) => {
             >
               <View
                 style={{
-                  height: 60,
-                  width: 150,
+                  marginTop: '5%',
                   backgroundColor: 'yellow',
-                  alignSelf: 'center',
-                  marginTop: 50,
-                  borderRadius: 30,
-                  justifyContent: 'center',
+                  width: 250,
+                  height: 55,
+                  paddingVertical: 10,
+                  borderRadius: 15,
                   alignItems: 'center',
+                  shadowColor: 'rgba(0, 0, 0, 0.9)', // Add a shadow color
+                  borderColor: 'rgba(255, 255, 255, 0.5)', // Add a border color
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.9)', // Add a box shadow
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.8,
+                  shadowRadius: 3,
+                  elevation: 20, // Add elevation for Android shadow
+                 
                 }}
               >
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>CONTINUE</Text>
+                <Text className="text-black text-lg font-semibold">CREATE ACCOUNT</Text>
               </View>
             </TouchableOpacity>
             {/* CONTINUE BUTTON -------------------------------------------------------------------------------*/}
 
             {/* RESEND OTP */}
-              <View style={{ alignItems: 'center', marginTop: 10 }}>
+              <View style={{ alignItems: 'center', marginTop: 40 }}>
                 {countdown === 0 ? (
                   <TouchableOpacity onPress={handleResendOTP} disabled={isResending}>
                     <Text style={{color: 'white', fontSize: 16, textDecorationLine: 'underline'}}>
@@ -279,6 +371,20 @@ const FourthRegisterView = ({ route }) => {
               </Text>
             </TouchableOpacity>
             {/* BACK BUTTON ----------------------------------------------------------------------------------*/}
+
+             {/* BACK BUTTON */}
+             <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Home');
+              }}
+              style={{ marginTop: 50, marginHorizontal: 30, textAlign: 'center' }}
+            >
+              <Text style={{ color: 'red', fontSize: 16, textDecorationLine: 'underline' }}>
+                IF NOT CONNECTED TO THE SERVER PLEASE CLICK ME!!!!!!!!!!!!!
+              </Text>
+            </TouchableOpacity>
+            {/* BACK BUTTON ----------------------------------------------------------------------------------*/}
+
           </View>
         )}
       </Formik>

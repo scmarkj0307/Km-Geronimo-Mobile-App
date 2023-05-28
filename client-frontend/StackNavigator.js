@@ -8,7 +8,9 @@ import RegisterView from './src/screens/FirstRegisterView';
 import SecondRegisterView from './src/screens/SecondRegisterView';
 import ThirdRegisterView from './src/screens/ThirdRegistrationView';
 import FourthRegisterView from './src/screens/FourthRegisterView';
-import MainPageView from './src/screens/MainPageView';
+import MainPageView from './src/screens/MainPageScreens/MainPageView';
+import VerificationScreen from './src/screens/VerificationScreen';
+import CalendarView from './src/screens/MainPageScreens/Calendar';
 
 
 
@@ -16,8 +18,12 @@ import MainPageView from './src/screens/MainPageView';
 
 const Stack = createNativeStackNavigator();
 
+
+
 const StackNavigator = () => {
+  
   return (
+    
     <KeyboardAvoidingView
       behavior= {Platform.OS === "ios" ? "padding" : "height"}
       style={{flex: 1}}
@@ -49,18 +55,8 @@ const StackNavigator = () => {
           <Stack.Screen name="SECONDREGISTER" component={SecondRegisterView} options={{ title: 'KM-GERONIMO',headerShown: false }}/>
           <Stack.Screen name="THIRDREGISTER" component={ThirdRegisterView} options={{ title: 'KM-GERONIMO',headerShown: false, }}/>
           <Stack.Screen name="FOURTHREGISTER" component={FourthRegisterView} options={{ title: 'KM-GERONIMO',headerShown: false, }}/>
-
-          <Stack.Screen name="MAIN" component={MainPageView} options={{ title: '',headerRight: () => (
-              <View style={{ marginRight: 89, flexDirection: 'row', alignItems: 'center' }}>
-                <Image
-                  source={LogoImage}
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text style={{ color: 'white', marginLeft: 5, fontWeight: 'bold', fontSize: 20 }}>KM-GERONIMO</Text>
-              </View>
-              ), headerStyle: {
-                backgroundColor: '#0891b2', 
-              },headerTintColor: 'white', }} />
+          <Stack.Screen name="Verification" component={VerificationScreen} options={{ title: 'KM-GERONIMO',headerShown: false, }}/>
+          <Stack.Screen name="MAIN" component={MainPageView} options={{headerShown: false}} />
       </Stack.Navigator>
       </ScrollView>
     </KeyboardAvoidingView>

@@ -1,26 +1,30 @@
-const accountSid = 'ACd2273c63ca1ff66042850ae58c590198';
-const authToken = 'f9bcfc886220e8cb1d94b0772348a457';
-const serviceId = 'VAc64136e85189e3969466abdb68922f26';
-const twilio = require('twilio');
-const client = new twilio(accountSid, authToken);
-
+const dotenv = require('dotenv');
 const express = require('express');
-const cors = require('cors'); // Import the cors package
+const cors = require('cors');
+const twilio = require('twilio');
+
+dotenv.config(); // Load environment variables from .env file
+
+const accountSid = process.env.ACCOUNT_SID;
+const authToken = process.env.AUTH_TOKEN;
+const serviceId = process.env.SERVICE_ID;
+const client = twilio(accountSid, authToken);
+
 const app = express();
 const port = 5000;
 
-app.use(cors()); // Enable CORS for all routes
+app.use(cors());
 
 app.get('/', (req, res) =>
-  res.send('Welcome to Verification service!'),
+  res.send('Welcome to Verification service!')
 );
 
 app.get('/verify/:to', async (req, res) => {
   const to = req.params.to;
 
-  client.verify
-    .services(serviceId)
-    .verifications.create({ to, channel: 'sms' })
+  client.verify.v2.services(serviceId)
+    .verifications
+    .create({ to, channel: 'sms' })
     .then((verification) => {
       res.json(verification);
     })
@@ -32,9 +36,10 @@ app.get('/verify/:to', async (req, res) => {
 app.get('/check/:to/:code', async (req, res) => {
   const to = req.params.to;
   const code = req.params.code;
-  client.verify
-    .services(serviceId)
-    .verificationChecks.create({ to, code })
+
+  client.verify.v2.services(serviceId)
+    .verificationChecks
+    .create({ to, code })
     .then((verification) => {
       res.json(verification);
     })
